@@ -1,0 +1,122 @@
+﻿@model ML.Motocicleta
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="conteiner">
+    <div class="row">
+        <h2>Motocicleta</h2>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            @using(Html.BeginForm("GetAll","Motocicleta",FormMethod.Post, new {enctype = "multipart/form-data" }))
+            {
+                
+
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("SKU")
+                        @Html.TextBoxFor(model => model.SKU, new { @class = "form-control" , @placeholder="4225-776-3234", autocomplete = "on" }) 
+
+                    </div>
+                    <div class="col-md-3">
+                        @Html.Label("Modelo")
+
+                        
+                        @Html.TextBoxFor(model => model.Modelo, new { @class = "form-control", @placeholder="AT110", autocomplete = "on" })
+                            
+                    </div>
+                    
+                </div>
+
+             <p>
+                 <input class="btn btn-primary" type="submit" value="Buscar">
+
+             </p>
+                
+                
+                
+            }
+
+        </div>
+
+     
+    </div>
+
+
+
+
+
+
+
+    <div class="row">
+        <div style="float:left;">
+            @Html.ActionLink("+", "Form", "Motocicleta", htmlAttributes: new { @class = "btn btn-success" })
+
+        </div>
+        @if (Model.Motocicletas == null)
+        {
+            <div class="p-3 mb-2 bg-danger text-white">Aun no hay materias registradas</div>
+        }
+        else
+        {
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr class="table-secondary">
+                        <td class="text-center">Editar</td>
+
+                        <td style ="display :none">IdMotocicleta</td>
+                        <td class="text-center">SKU</td>
+                        <td class="text-center">Fert</td>
+                        <td style ="display :none">IdTipo</td>
+                        <td class="text-center">Tipo</td>
+                        <td class="text-center">NúmeroDeSerie</td>
+                        <td class="text-center">Fecha</td>
+                        <td class="text-center">Imagen</td>
+                        <td class="text-center">Borrar</td>
+                        
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (ML.Motocicleta motocicleta in Model.Motocicletas)
+                    {
+                        <tr>
+                            <td style ="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "Motocicleta", new { IdMotocicleta = motocicleta.IdMotocicleta })"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                            
+
+                            <td style ="display :none">@motocicleta.IdMotocicleta</td>
+                            <td class="text-center">@motocicleta.SKU</td>
+                            <td class="text-center">@motocicleta.Fert</td>
+                            <td style ="display :none">@motocicleta.Tipo.IdTipo</td>
+                            <td class="text-center">@motocicleta.Tipo.Nombre.ToString()</td>
+                            <td class="text-center">@motocicleta.NúmeroDeSerie</td>
+                            <td class="text-center">@motocicleta.Fecha</td>
+                            <td class="text-center">
+                            @if (motocicleta.Imagen !=null)
+                        {
+                            <img class="card-ing" src="data:image/*;base64,@motocicleta.Imagen"style="width:150px ; height:150px" />
+                        }
+                            else
+                        {
+                             <img class="card-ing" src="~/Imagenes/UsuarioPorDefecto.jpg" style="width:150px ; height:150px" />
+                        }
+
+                            </td>
+
+
+
+                            <td style ="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Motocicleta", new { IdMotocicleta= motocicleta.IdMotocicleta})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+</div>
+

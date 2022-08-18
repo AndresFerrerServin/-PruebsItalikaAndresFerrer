@@ -1,0 +1,175 @@
+﻿@model ML.Motocicleta
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-ml-12">
+                <h3>@ViewBag.Titulo</h3>
+                <h5>Ingresa los datos</h5>
+                <hr />
+
+            </div>
+        </div>
+    
+    <div class="row">
+        <div class = "col-md-12">
+            @using(Html.BeginForm("Form","Motocicleta",FormMethod.Post, new {enctype = "multipart/form-data" }))
+            {
+                <div class="row">
+                    <div class="col-md-3" style="display: none;">
+                        @Html.TextBoxFor(model => model.IdMotocicleta, new { @class = "hidden form-control", autocomplete = "off" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.SKU)
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-file-person-fill" style="color: midnightblue"></i></span>
+                            @Html.TextBoxFor(model => model.SKU, new { @class = "form-control", @id = "txtSKU", @placeholder="Z25W033", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.SKU, null, new { @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Fert)
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-file-person-fill" style="color: midnightblue"></i></span>
+                            @Html.TextBoxFor(model => model.Fert, new { @class = "form-control", @id = "txtFert)", @placeholder="Z3T5W032", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Fert, null, new { @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Modelo)
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-file-person-fill" style="color: midnightblue"></i></span>
+                            @Html.TextBoxFor(model => model.Modelo, new { @class = "form-control", @id = "txtModelo)", @placeholder="AT110LT", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Modelo, null, new { @class = "text-danger"})
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row"> 
+
+                   
+                    <div class="col-md-3">
+                        @Html.Label("IdTipo")
+                     <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-star" style="color: midnightblue"></i></span>
+                        @Html.DropDownListFor(model => model.Tipo.IdTipo, new SelectList(Model.Tipo.Tipos, "IdTipo", "Nombre"), "Selecciona un tipo de moto", new { @class = "form-control", @id = "ddlIdTipo" })
+                        @Html.ValidationMessageFor(model => model.Tipo.IdTipo)
+                     </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.NúmeroDeSerie)
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-file-person-fill" style="color: midnightblue"></i></span>
+                            @Html.TextBoxFor(model => model.NúmeroDeSerie, new { @class = "form-control", @id = "txtNúmeroDeSerie)", @placeholder="AT110LT", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.NúmeroDeSerie, null, new { @class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Fecha)
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-calendar-date" style="color: midnightblue"></i></span>
+                            @Html.TextBoxFor(model => model.Fecha, new { @class = "form-control", @id = "txtFecha", @placeholder="20-05-1998", autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Fecha, null, new { @class = "text-danger"})
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                          @Html.LabelFor(model=> model.Imagen)
+                           <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="bi bi-card-image"></i></span>
+                                <input id="IFImagen" type='file' class="form-control" name="IFImagen" onchange="validateFile(this), readURL(this);  " />
+                           </div>
+                           @if (Model.Imagen !=null)
+                        {
+                            <img id="Img" src="data:image/*;base64,@Model.Imagen"style="width:250px ; height:250px" />
+                        }
+                            else
+                        {
+                             <img id="Img" src="~/Imagenes/UsuarioPorDefecto.jpg" style="width:250px ; height:250px" />
+                        }
+                    </div>
+                    @Html.HiddenFor(model => model.Imagen)
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="submit" value="Guardar" class="btn btn-success" />
+                            @Html.ActionLink("Regresar", "GetAll", "Motocicleta", htmlAttributes: new { @class = "btn btn-danger" })
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+        </div>
+
+    </div>
+    
+    
+    </div>
+</div>
+
+@section Scripts
+{
+
+      <script src="~/lib/jquery/dist/jquery.js"></script>
+      <script type="text/javascript">
+
+ function validateFile()
+      {
+                    var allowedExtension = ['jpeg', 'jpg','png'];
+                    var fileExtension = document.getElementById('IFImagen').value.split('.').pop().toLowerCase();
+                    var isValidFile = false;
+                        for(var index in allowedExtension) {
+                            if(fileExtension === allowedExtension[index]) {
+                                isValidFile = true;
+                                break;
+                            }
+                        }
+                        if(!isValidFile) {
+                            alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+                            document.getElementById('IFImagen').value = ""
+                        }
+                        return isValidFile;
+                }
+                function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#Img')
+                          .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+      }
+
+    
+
+    </script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+            $( function() {
+      $( "#txtFecha" ).datepicker({dateFormat: 'dd-mm-yy',
+                                  changeMonth: true,
+                                  changeYear: true});
+    } );
+
+ </script>
+
+}
